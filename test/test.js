@@ -30,7 +30,7 @@ contract('StarBurn', ([deployer, author, tipper]) => {
     let result
 
     it('create images', async () => {
-      result = await starBurn.uploadImage()
+      result = await starBurn.uploadImage('abc123', 'hellow world')
       let image = await starBurn.images(1)
       console.log(image)
     })

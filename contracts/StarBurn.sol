@@ -4,6 +4,8 @@ pragma solidity >=0.5.0 <0.9.0;
 contract StarBurn {
     string public name = "StarBurn";
 
+//image counter
+   uint public imageCount = 0;
     //mapping images to indexes
     mapping (uint => Image) public images;
     // mapping (uint => Post) public posts;
@@ -15,7 +17,6 @@ contract StarBurn {
         string description;
         uint tipAmount; 
         address payable author;
-
     } 
 
     struct Post {
@@ -28,10 +29,20 @@ contract StarBurn {
         address payable author;
     }
 
+    //event emitted when an image is created 
+    event ImageCreated(
+        uint id,
+        string hash,
+        string description,
+        uint tipAmount,
+        address payable author
+    ); 
+
     //CRUD posts
     //create a new image -> next get dynamic image id using a counter
-    function uploadImage() public {
-        images[1] = Image(1, 'abc123', 'something', 0, address(0x0));
+    function uploadImage(string memory _imageHash, string memory _imageDescription) public {
+        imageCount ++;
+        images[imageCount] = Image(imageCount, _imageHash, _imageDescription, 0, payable (msg.sender)); //ignore warning...
     } 
     //reward posts (interactions)
 
