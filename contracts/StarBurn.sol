@@ -42,7 +42,10 @@ contract StarBurn {
     //create a new image -> next get dynamic image id using a counter
     function uploadImage(string memory _imageHash, string memory _imageDescription) public {
         imageCount ++;
+        //add image to contract
         images[imageCount] = Image(imageCount, _imageHash, _imageDescription, 0, payable (msg.sender)); //ignore warning...
+        //Trigger an event
+        emit ImageCreated(imageCount, _imageHash, _imageDescription, 0, payable (msg.sender));
     } 
     //reward posts (interactions)
 

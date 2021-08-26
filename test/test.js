@@ -27,12 +27,19 @@ contract('StarBurn', ([deployer, author, tipper]) => {
   })
 
   describe('images', async () => {
-    let result
+    let result, imageCount
+    const hash = "abc123"
+
+    before(async () => {
+      result = await starBurn.uploadImage(hash, "image description", { from: author})
+      imageCount = await starBurn.imageCount()
+  })
 
     it('create images', async () => {
-      result = await starBurn.uploadImage('abc123', 'hellow world')
-      let image = await starBurn.images(1)
-      console.log(image)
+ //success
+      assert.equal(imageCount, 1);
+      const event = result.logs[0].args;
+      // const event = 
     })
   })
 
