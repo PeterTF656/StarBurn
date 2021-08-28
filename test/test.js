@@ -1,7 +1,7 @@
 const StarBurn = artifacts.require('./StarBurn.sol')
 
 require('chai')
-//   .use(require('chai-as-promised'))
+  .use(require('chai-as-promised'))
   .should()
 
 contract('StarBurn', ([deployer, author, tipper]) => {
@@ -31,7 +31,7 @@ contract('StarBurn', ([deployer, author, tipper]) => {
     const hash = "abc123"
 
     before(async () => {
-      result = await starBurn.uploadImage(hash, "image description", { from: author})
+      result = await starBurn.uploadImage(hash, "Image description", { from: author})
       imageCount = await starBurn.imageCount()
   })
 
@@ -39,7 +39,18 @@ contract('StarBurn', ([deployer, author, tipper]) => {
  //success
       assert.equal(imageCount, 1);
       const event = result.logs[0].args;
-      // const event = 
+      assert.equal(event.id.toNumber(), imageCount.toNumber(), 'id is correct')
+      assert.equal(event.hash, hash, 'Hash is correct')
+      assert.equal(event.description, 'Image description', 'description is correct')
+      assert.equal(event.tipAmount, '0', 'tip amount is correct')
+      assert.equal(event.author, author, 'author is correct')
+
+            // FAILURE: Image must have hash
+      await starBurn.uploadImage('', 'Image description', { from: author }).should.be.rejected;
+
+      // FAILURE: Image must have description
+      await starBurn.uploadImage('Image hash', '', { from: author }).should.be.rejected;
+    
     })
   })
 
@@ -62,6 +73,8 @@ contract('StarBurn', ([deployer, author, tipper]) => {
 //       assert.equal(event.description, 'Image description', 'description is correct')
 //       assert.equal(event.tipAmount, '0', 'tip amount is correct')
 //       assert.equal(event.author, author, 'author is correct')
+
+
 
 
 //       // FAILURE: Image must have hash

@@ -41,6 +41,18 @@ contract StarBurn {
     //CRUD posts
     //create a new image -> next get dynamic image id using a counter
     function uploadImage(string memory _imageHash, string memory _imageDescription) public {
+
+        //add a content check using require(); _imageHash, _imageDescription and sender address should be non-empty
+
+        require(bytes(_imageHash).length > 0, 'Fatal: blank image');
+
+        //
+        require(bytes(_imageDescription).length > 0, 'Fatal: blank description');
+
+        //
+        require(msg.sender != address(0x0), 'Fatal: blank image');
+
+        //
         imageCount ++;
         //add image to contract
         images[imageCount] = Image(imageCount, _imageHash, _imageDescription, 0, payable (msg.sender)); //ignore warning...
