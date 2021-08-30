@@ -38,6 +38,14 @@ contract StarBurn {
         address payable author
     ); 
 
+    event ImageTipped(
+        uint id,
+        string hash,
+        string description,
+        uint tipAmount,
+        address payable author
+  );
+
     //CRUD posts
     //create a new image -> next get dynamic image id using a counter
     function uploadImage(string memory _imageHash, string memory _imageDescription) public {
@@ -59,7 +67,22 @@ contract StarBurn {
         //Trigger an event
         emit ImageCreated(imageCount, _imageHash, _imageDescription, 0, payable (msg.sender));
     } 
-    //reward posts (interactions)
-
-    
+    //reward posts (interactions) ** tip image owner
+    function tipImageOwner(uint _id) public payable {
+    //need to tip in range
+    require(_id>0 && _id <= imageCount, 'the image tipped not exist');
+    //fetch image to local variable
+     Image memory _image = images[_id];   
+     // payable address of author
+     address payable _author = _image.author;
+     //send the amount of tips
+     _author.transfer(msg.value);
+    // showing total amount of tips
+    _image.tipAmount += msg.value;
+    //update image info
+    images[_id] = _image;
+    // Trigger an event
+    emit ImageTipped(_id, _image.hash, _image.description, _image.tipAmount, _author);  
+    }
+ 
 }
